@@ -1,0 +1,8 @@
+Django
+django-taggit
+django-haystack
+pysolr
+Markdown
+pytz
+django-dotenv
+

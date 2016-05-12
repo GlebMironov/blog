@@ -1,0 +1,57 @@
+{% load blog_tags %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<link href="{% static 'css/blog.css' %}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div id="sidebar">
+		<img class="photo" src="{% static 'img/my_photo.jpg' %}">
+		<p class="about_me_center">Gleb Mironov</p>
+		<p class="about_me">Software Architect and Team Lead. In Python for 7 years.</p>
+		<h3>Latest posts</h3>
+		{% show_latest_posts 3 %}
+		<h3>Most commented posts</h3>
+		{% get_most_commented_posts as most_commented_posts %}
+		<ul>
+			{% for post in most_commented_posts %}
+				<li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+			{% endfor %}
+		</ul>
+		<h3>About me</h3>
+		<ul>
+			<li><a href="/blog/2016/05/07/about-blog/">About blog</a></li>
+			<li><a href="/blog/2016/05/09/about-me/">About me</a></li>
+			<!--li><a href="/cv/">My CV</a></li-->
+		</ul>
+		<h3>Tags</h3>
+		<ul class="tags">
+		{% tags_list_count as counted_tags %}
+		{% for model, tags in counted_tags.items %}
+			{% for tag, count in tags.items|dictsort:"0.name.lower" %}
+				<li><a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{ tag }}</a> ({{ count }})</li>
+			{% endfor %}
+		{% endfor %}
+		</ul>
+	</div>
+	<div id="header">
+		<a href="/" class="logo">glebmironov.com</a>
+		<div class="nav">
+			<ul>
+				<li><a href="https://twitter.com/glebmi69"><img src="{% static 'img/twitter.png' %}"></a></li>
+				<li><a href="https://facebook.com/gleb.mironov.33"><img src="{% static 'img/facebook.png' %}"></a></li>
+				<li><a href="https://plus.google.com/u/0/118198031011300789150"><img src="{% static 'img/googleplus.png' %}"></a></li>
+				<li><a href="https://github.com/GlebMironov"><img src="{% static 'img/github.png' %}"></a></li>
+				<li><a href="https://ua.linkedin.com/in/glebmironov"><img src="{% static 'img/linkedin.png' %}"></a></li>
+				<li><a href="{% url 'blog:post_feed' %}"><img src="{% static 'img/rss.png' %}"></a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="content">
+		{% block content %}
+		{% endblock %}
+	</div>
+</body>
+</html>
